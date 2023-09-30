@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -5,7 +6,7 @@ function Login(props) {
 
     const [credentials, setCredentials] = useState({ email: "", password: "", showPassword: false });
     const [errors, setErrors] = useState({});
-    let history = useNavigate();
+    let Navigate = useNavigate();
 
     const onchange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -20,46 +21,64 @@ function Login(props) {
     }
 
     const handleClick = async () => {
-        const response = await fetch("https://inotebook-server.onrender.com/api/auth/login", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email: credentials.email, password: credentials.password })
+let data
+        const { email, password, } = credentials;
+        axios.post("https://inote-mern-back.onrender.com/login", {
+            email: email,
+            password:password
+        }).then(function (response) {
+             data = JSON.stringify(response);
+            console.log("going data");
+            Navigate(`/addnote/${response.data
+                }`);
+        }).catch((err) => { console.log("error" + err) })
+        
+console.log(data);
 
-        });
-        const json = await response.json();
-        console.log(json)
-        if (json.success) {
-            localStorage.setItem('token', json.authtoken)
-            history("/")
-            props.showAlert("Logged in successfully", "success")
-        } else {
-            if (json.validationErrors) {
-                json.validationErrors.map((err) => {
-                    if (err.param === 'password') {
-                        setErrors((prev) => ({ ...prev, password: err.msg }))
-                    } else {
-                        setErrors((prev) => ({ ...prev, email: err.msg }))
-                    }
-                })
-            }
-            if (json.error) {
-                props.showAlert("Invalid Details! " + json.error, "danger")
-            }
-        }
+
 
     }
+
+        // const response = await fetch("https://inote-mern-back.onrender.com/login", {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({ email: credentials.email, password: credentials.password })
+
+        // });
+        // const json = await response.json();
+        // console.log(json)
+        // if (json.success) {
+        //     localStorage.setItem('token', json.authtoken)
+        //     history("/")
+        //     props.showAlert("Logged in successfully", "success")
+        // } else {
+        //     if (json.validationErrors) {
+        //         json.validationErrors.map((err) => {
+        //             if (err.param === 'password') {
+        //                 setErrors((prev) => ({ ...prev, password: err.msg }))
+        //             } else {
+        //                 setErrors((prev) => ({ ...prev, email: err.msg }))
+        //             }
+        //         })
+        //     }
+        //     if (json.error) {
+        //         props.showAlert("Invalid Details! " + json.error, "danger")
+        //     }
+        // }
+
+    
 
     return (
         <div>
             <div className='text-center mt-5 mb-4'>
-                <h1>iNOTEBOOK</h1>
+                <h1>NoteVerse</h1>
                 <p><b>Your notes on cloud ☁️</b></p>
             </div>
 
             <div className="container form">
-                <p className="text-center"><i>Login to continue using iNotebook 😊 </i></p>
+                <p className="text-center"><i>Login to continue using NoteVerse 😊 </i></p>
                 <div className="mb-4 input-container">
                     <label htmlFor="email" className="form-label">Email address</label>
                     <input type="email" className="form-control" onChange={onchange} id="email" name="email" placeholder="name@example.com" />
@@ -77,7 +96,7 @@ function Login(props) {
                 <button className='btn btn-primary' onClick={handleClick}>Login</button>
             </div>
             <br />
-            <p className='text-center last-para'>Don't have an account? <a href="/signup">SignUp-&gt;</a> </p>
+            <p className='text-center last-para'>Don't have an account? <a href="/">SignUp-&gt;</a> </p>
         </div>
     )
 }
