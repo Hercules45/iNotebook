@@ -23,7 +23,7 @@ function EditNote(props) {
 
                                 <div className="mb-3 ">
                                     <label htmlFor="tag" className="form-label">Tag</label>
-                                    <select className="form-select" aria-label="Default select example" id="tag" value={enote.tag} onChange={onchange} name="tag">
+                                    <select className="form-select" aria-label="Default select example" id="tag" value={props.tag} onChange={onchange} name="tag">
 
                                         <option value="Todo">Todo</option>
                                         <option value="Important">Important</option>
@@ -34,11 +34,11 @@ function EditNote(props) {
                                 </div>
                                 <div className="mb-3 ">
                                     <label htmlFor="title" className="form-label">Title</label>
-                                    <input type="text" className="form-control" id="title" value={enote.title} onChange={onchange} name="title" />
+                                    <input type="text" className="form-control" id="title" value={props.title} onChange={onchange} name="title" />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="description" className="form-label">Description</label>
-                                    <textarea className="form-control" id="description" name="description" value={enote.description} onChange={onchange} rows="3"></textarea>
+                                    <textarea className="form-control" id="description" name="description" value={props.description} onChange={onchange} rows="3"></textarea>
                                 </div>
 
                             </div>
